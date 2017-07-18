@@ -198,8 +198,9 @@ class Toc
       @lines = []
 
 
-# escape markdown style link url in name
+# escape link urls in @name to link names
 # for example, "[link name](link url)" will be "link name"
+# nested urls will be reduced to just link names
   ___escapeLinkUrl: (name) ->
     while true
       match = /\[.*?\]\(.*?\)/g.exec name # get the first match
@@ -215,14 +216,17 @@ class Toc
 
 # create hash and surround link with it
   ___createLink: (name) ->
-    name = @___escapeLinkUrl name
-    hash = new String name
+    hash = name.replace(/!\[(.*?)\]\(.*?\)/g, "")
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
     hash = hash.toLowerCase().replace /\s/g, "-"
     hash = hash.replace /[^a-z0-9\u4e00-\u9fa5äüö\-]/g, ""
     if hash.indexOf("--") > -1
       hash = hash.replace /(-)+/g, "-"
     if name.indexOf(":-") > -1
       hash = hash.replace /:-/g, "-"
+
+    name = @___escapeLinkUrl name
+
     link = []
     link.push "["
     link.push name
