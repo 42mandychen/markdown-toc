@@ -198,8 +198,23 @@ class Toc
       @lines = []
 
 
-  # create hash and surround link withit
+# escape markdown style link url in name
+# for example, "[link name](link url)" will be "link name"
+  ___escapeLinkUrl: (name) ->
+    match = /\[.*?\]\(.*?\)/g.exec name # get the first match
+
+    if match isnt null
+      strMatch = match[0]
+      strMatch = strMatch.replace /^\[/, ""
+      strMatch = strMatch.replace /\]\(.*?\)$/, ""
+      name = strMatch
+
+    return name
+
+
+# create hash and surround link with it
   ___createLink: (name) ->
+    name = @___escapeLinkUrl name
     hash = new String name
     hash = hash.toLowerCase().replace /\s/g, "-"
     hash = hash.replace /[^a-z0-9\u4e00-\u9fa5äüö\-]/g, ""
