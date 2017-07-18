@@ -201,12 +201,14 @@ class Toc
 # escape markdown style link url in name
 # for example, "[link name](link url)" will be "link name"
   ___escapeLinkUrl: (name) ->
-    match = /\[.*?\]\(.*?\)/g.exec name # get the first match
-
-    if match isnt null
-      link = match[0]
-      nameOflink = link.replace(/^\[/, "").replace(/\]\(.*?\)$/, "")
-      name = name.split(link).join(nameOflink)
+    while true
+      match = /\[.*?\]\(.*?\)/g.exec name # get the first match
+      if match isnt null
+        link = match[0]
+        nameOflink = link.replace(/^\[/, "").replace(/\]\(.*?\)$/, "")
+        name = name.split(link).join(nameOflink)
+      else
+        break
 
     return name
 
