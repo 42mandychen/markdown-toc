@@ -204,10 +204,9 @@ class Toc
     match = /\[.*?\]\(.*?\)/g.exec name # get the first match
 
     if match isnt null
-      strMatch = match[0]
-      strMatch = strMatch.replace /^\[/, ""
-      strMatch = strMatch.replace /\]\(.*?\)$/, ""
-      name = strMatch
+      link = match[0]
+      nameOflink = link.replace(/^\[/, "").replace(/\]\(.*?\)$/, "")
+      name = name.split(link).join(nameOflink)
 
     return name
 
